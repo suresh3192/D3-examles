@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<h1>D3.js Bar chart</h1>
+	<h3>Bar chart with text labeling </h3>
+<script>
+var w = 300; // window width for the bar chart
+var h = 120; // window height for the bar chart
+var padding = 2; // padding between the bars
+
+var dataset = [ 5, 10, 13, 19, 21, 25,
+                11, 25, 22, 18, 7]; // sample dataset
+
+var svg = d3.select("body").append("svg")  // creating an svg Element and appending to body
+          .attr("width", w)					// adding the attributes height & width
+          .attr("height", h);
+
+// color generator for each bar based on conditions
+function colorPicker(v) {
+  if (v<=20) { return "#666666"; }
+  else if (v>20) { return "#FF0033"; }
+}
+
+
+// Selects the rect elements if exists and clears them and adds the new elemens
+svg.selectAll("rect")
+  .data(dataset)  // dataset to be used for the bar chart
+  .enter()
+  .append("rect") // appends the rect elements to the previous "svg" element
+  .attr({
+    x: function(d, i) {return i * (w / dataset.length);}, // x-coordinate calculation for each bar
+    y: function(d) {return h - (d*4);}, //y-coordinate calculation for each bar
+    width: w / dataset.length - padding, // width based on the window width and number of dataset items
+    height: function(d) {return d*4;}, // height calculations
+    fill: function(d) {return colorPicker(d);} // color of each bar
+  });
+// The labeling of the bars with coresponding data using text element
+svg.selectAll("text")
+  .data(dataset)
+  .enter()
+  .append("text")
+  .text(function (d) { return d; }) //returns text to display
+  .attr({
+    "text-anchor": "middle",
+    x: function(d, i) {return i * (w / dataset.length)+(w / dataset.length - padding) / 2;},
+    y: function(d) { return h - (d*4)+14; },
+    "font-family": "sans-serif",
+    "font-size": 16,
+    "fill": "#ffffff"
+  });</script></body>
+</html>
